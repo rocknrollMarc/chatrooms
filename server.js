@@ -19,7 +19,7 @@ function sendFile(response, filePath, fileContents) {
 }
 
 function seveStatic(response, cache, absPath) {
-  if (cache[absPath])
+  if (cache[absPath]) {
     sendFile(response, absPath, cache[absPath]);
 } else {
   fs.exists(absPath, function(exists) {
@@ -29,10 +29,27 @@ function seveStatic(response, cache, absPath) {
           send404(response);
         } else {
           cache[absPath] = data;
+          sendFile(response, absPath, data);
         }
       });
     } else {
       send404(response);
     }
-  })
+  });
+  }
 }
+
+var server = http.createServer(function(request, response) {
+  val filePath = false;
+
+  if (request.url == '/') {
+    filePath = 'public/index.html';
+  } else {
+    filePath = 'public' + request.url;
+  }
+
+  var absPath = './' + filePath;
+  serveStatic(response, cache, absPath);
+});
+
+
