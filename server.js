@@ -13,7 +13,7 @@ function send404(response) {
 function sendFile(response, filePath, fileContents) {
   response.writeHead(
     200,
-    {content-Type: mime.lookup(path.basename(filePath))}
+    {"content-Type": mime.lookup(path.basename(filePath))}
   );
   response.end(fileContents);
 }
@@ -40,7 +40,6 @@ function seveStatic(response, cache, absPath) {
 }
 
 var server = http.createServer(function(request, response) {
-  val filePath = false;
 
   if (request.url == '/') {
     filePath = 'public/index.html';
@@ -51,5 +50,8 @@ var server = http.createServer(function(request, response) {
   var absPath = './' + filePath;
   serveStatic(response, cache, absPath);
 });
+  server.listen(3000, function() {
+    console.log("Server listening on port 3000.");
+  });
 
 
